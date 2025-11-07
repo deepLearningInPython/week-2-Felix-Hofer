@@ -2,7 +2,7 @@ import numpy as np  # linear algebra
 import pandas as pd  # data processing, CSV file I/O (e.g. pd.read_csv)
 from scipy.optimize import minimize  # Python version of R's optim() function
 from sklearn import datasets
- 
+
 # Carry out the exercises in your own copy of the notebook that you can find at
 #    https://www.kaggle.com/code/datasniffer/perceptrons-mlp-s-and-gradient-descent.
 # Then copy and paste code asked for below in between the dashed lines.
@@ -14,17 +14,18 @@ from sklearn import datasets
 # The function should accept a vector of weights and a matrix X that stores input feature
 # vectors in its **columns**.
 # The name of the function should be my_mlp.
- 
+
 # Copy and paste the code for that function here:
 # -----------------------------------------------
 def my_mlp(w, X, sigma=np.tanh):
-    W1 = np.array(w[0:4*6]).reshape(4,6)
-    W2 = np.array(w[4*6:7*4+6*4]).reshape(7,4)
-    W3 = np.array(w[7*4+6*4:]).reshape(1,7)
-   
+    W1 = np.array(w[0:(6*4)]).reshape((4,6))
+    W2 = np.array(w[6*4:(6*4)+ (7*4)]).reshape((7,4))
+    W3 = np.array(w[(6*4)+(7*4): 7 + (6*4) + (7*4)]).reshape((1,7))
+    
     a1 = sigma(W1 @ X)
     a2 = sigma(W2 @ a1)
-    f  = sigma(W3 @ a2)
+    f = sigma(W3 @ a2)
+
     return f
 # -----------------------------------------------
  
@@ -40,7 +41,7 @@ def my_mlp(w, X, sigma=np.tanh):
 # -----------------------------------------------
 def MSE_func(w, X, y): # give the appropriate name and arguments
     f = my_mlp(w, X)
-    MSE = np.sum((y-f)**2)
+    MSE = np.sum((f - y)**2)
     return MSE
 # -----------------------------------------------
  
@@ -57,8 +58,8 @@ def MSE_func(w, X, y): # give the appropriate name and arguments
 # Copy and paste the code for that function here:
 # -----------------------------------------------
 def dR(beta, x, y):
-    dbeta_0 = 2*np.mean((beta[0] + beta[1]*x - y))   # implement the above formula for dR/dβ₀
-    dbeta_1 = 2*np.mean((beta[0] + beta[1]*x - y)*x) # implement the above formula for dR/dβ₁
+    dbeta_0 = (2/len(x)) * (beta[0] + beta[1]* x - y).sum() # implement the above formula for dR/dβ₀
+    dbeta_1 = (2/len(x)) * ((beta[0] + beta[1]* x - y) * x).sum()
     return np.array([dbeta_0, dbeta_1])
- 
+
 # -----------------------------------------------
